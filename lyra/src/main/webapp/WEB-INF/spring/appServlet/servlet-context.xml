@@ -21,8 +21,8 @@
 	</beans:bean>
 	
 	<beans:bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
-	  <beans:property name="prefix" value="/WEB-INF/templates/" />
-	  <beans:property name="suffix" value=".jspx" />
+	  <beans:property name="prefix" value="/WEB-INF/thymeleaf/" />
+	  <beans:property name="suffix" value=".html" />
 	  <beans:property name="templateMode" value="HTML5" />
 	   <beans:constructor-arg ref="servletContext"/>
 	</beans:bean> 

@@ -159,7 +159,7 @@
 		  <artifactId>thymeleaf-spring4</artifactId>
 		  <version>3.0.0.RELEASE</version>
 		</dependency>
-
+		
     </dependencies>
   <build>
     <finalName>lyra</finalName>
