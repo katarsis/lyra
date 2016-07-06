@@ -47,6 +47,6 @@ public class AuthController {
 		userDefaultRole.add(defaultRole);
 		user.setRoles(userDefaultRole);
 		userAccountRepository.save(user);
-		return "redirect:/";
+		return "redirect:/login";
 	}
 }
