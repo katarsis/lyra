@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/header::header">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+    <div th:replace="fragments/dashboard/navbar"/>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div th:replace="fragments/dashboard/sidebar"/>
+         
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Decision tree sample</h1>
+
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <h4>Next section provide simple example of decision tree learning</h4>
+            </div>
+          </div>
+
+          <h2 class="sub-header">Data for building decision model</h2>
+          <form th:action="@{/dashboard/decision/tree/makeModel}" th:object="${csvData}" method="post">
+             <textarea class="form-control" name="data" id="data" rows="10" cols="70" th:field="*{data}" placeholder="Enter data"></textarea>
+             <button type="submit" class="btn btn-default">Make model</button>
+              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+           </form>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

@@ -3,6 +3,17 @@
 <head>
 </head>
 <body>
+
+<form th:action="@{/logout}" method="post" id="logoutForm">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+</form>
+
+<script>
+    function logoutSubmit() {
+                document.getElementById("logoutForm").submit();
+    }
+</script>
+
 <div class=" navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -18,8 +29,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Profile</a></li>
             <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Help</a></li>
+            <li><a href="javascript:logoutSubmit()">Logout</a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">

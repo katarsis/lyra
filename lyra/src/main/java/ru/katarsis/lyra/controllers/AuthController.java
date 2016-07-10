@@ -47,6 +47,11 @@ public class AuthController {
 		userDefaultRole.add(defaultRole);
 		user.setRoles(userDefaultRole);
 		userAccountRepository.save(user);
-		return "redirect:/login";
+		return "redirect:/";
 	}
+    
+    @RequestMapping(value="/logout", method = RequestMethod.GET)
+    public String doLogout(Model model){
+    	return "redirect:/";
+    }
 }
