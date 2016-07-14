@@ -23,6 +23,8 @@
           <h2 class="sub-header">Data for building decision model</h2>
           <form th:action="@{/dashboard/decision/tree/makeModel}" th:object="${csvData}" method="post">
              <textarea class="form-control" name="data" id="data" rows="10" cols="70" th:field="*{data}" placeholder="Enter data"></textarea>
+             <input type="text" class="form-control" name="categoryAttr" th:object="${categoryAttr}" id="categoryAttr" placeholder="Enter category attribute"></input>
+             <input type="text" class="form-control" name="ignoredAttr" th:object="${ignoredyAttr}" id="ignoredAttr" placeholder="Enter ignored attribute"></input>
              <button type="submit" class="btn btn-default">Make model</button>
               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
            </form>
