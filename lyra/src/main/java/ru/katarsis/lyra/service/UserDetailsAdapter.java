@@ -17,8 +17,14 @@ import ru.katarsis.lyra.model.UserAccount;
 
 public class UserDetailsAdapter implements UserDetails {
 
-	private UserAccount userAccount;
-	private String password;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    
+    private UserAccount userAccount;
+	@SuppressWarnings("unused")
+    private String password;
 	
 	
 	public UserDetailsAdapter(UserAccount userAccount) {

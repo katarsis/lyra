@@ -105,8 +105,8 @@ public class DecisionTreeService {
 	
 	private SplitedIems split(String [][]items, int attrib, BiPredicate<String,String> predicate, String value){
 	    SplitedIems result = new SplitedIems();
-	    List<String[]> matchedItems = new ArrayList();
-	    List<String[]> noMatchedItems = new ArrayList();
+	    List<String[]> matchedItems = new ArrayList<String[]>();
+	    List<String[]> noMatchedItems = new ArrayList<String[]>();
 	    for(int example =0; example<items.length;example++){
 	        if(predicate.test(items[example][attrib],value)){
 	            matchedItems.add(items[example]);
@@ -152,7 +152,6 @@ public class DecisionTreeService {
 	}
 	
 	private HashMap<String, Integer> calculateUniqeValue(String [][]items, int attrIndex){
-	    int[] result;
 	    HashMap<String, Integer> uniqueValues = new HashMap<>(); 
 	    for(int i=0;i<items.length;i++){
 	        uniqueValues.put(items[i][attrIndex], 0);
