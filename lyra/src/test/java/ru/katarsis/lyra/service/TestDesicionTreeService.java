@@ -11,7 +11,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import ru.katarsis.lyra.dto.DesicionTree;
+import ru.katarsis.lyra.dto.DecisionTree;
 
 @Test
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml" })
@@ -40,7 +40,7 @@ public class TestDesicionTreeService extends AbstractTestNGSpringContextTests {
     
     @Test()
     void testEmailGenerator() {
-        DesicionTree tree = decisionTreeService.buildTree(testItems, "sex", header, "person");
+        DecisionTree tree = decisionTreeService.buildTree(testItems, "sex", header, "person");
         Assert.assertEquals(tree.treeAttr+tree.predicate+tree.value, "weight>=170");
         Assert.assertEquals(tree.match.category, "male");
         Assert.assertEquals(tree.noMatch.treeAttr+tree.noMatch.predicate+tree.noMatch.value, "hairLength>=4");

@@ -15,6 +15,7 @@
         <org.springframework-version>4.1.9.RELEASE</org.springframework-version>
         <org.springframework-security>4.0.2.RELEASE</org.springframework-security>
         <hibernate.version>4.3.5.Final</hibernate.version>
+        <jackson.version>2.6.3</jackson.version>
   </properties>
     
 <dependencies>
@@ -131,6 +132,16 @@
             <artifactId>jsoup</artifactId>
             <version>1.8.3</version>
         </dependency>
+        <dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
        <!-- Spring security -->
         <dependency>
             <groupId>org.springframework.security</groupId>

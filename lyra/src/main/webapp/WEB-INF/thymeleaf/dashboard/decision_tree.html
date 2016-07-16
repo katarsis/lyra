@@ -5,32 +5,81 @@
 <title>Insert title here</title>
 </head>
 <script type="text/javascript">
-function treeToHtml(tree) {
-    
-    if (tree.category) {
-        return  ['<ul>',
-                    '<li>',
-                        '<a href="#" style="background-color:', tree.category, '">', EMPTY_STRING, '</a>',
-                    '</li>',
-                 '</ul>'].join('');
-    }
-    
-    return  ['<ul>',
-                '<li>',
-                    '<a href="#"><b>', tree.attribute, ' ', tree.predicateName, ' ', tree.pivot, ' ?</b></a>',
-                    '<ul>',
-                        '<li>',
-                            '<a href="#">yes (', tree.matchedCount, ' points) </a>',
-                            treeToHtml(tree.match),
-                        '</li>',
-                        '<li>',
-                            '<a href="#">no (', tree.notMatchedCount, ' points) </a>',
-                            treeToHtml(tree.notMatch),
-                        '</li>',
-                    '</ul>',
-                '</li>',
-             '</ul>'].join('');
+jQuery(document).ready(function($) {
+	$(function () {
+	    var token = $("input[name='_csrf']").val();
+	    var header = "X-CSRF-TOKEN";
+	    $(document).ajaxSend(function(e, xhr, options) {
+	        xhr.setRequestHeader(header, token);
+	    });
+	});
+	
+	$("#make_model_form").submit(function(event) {
+		enableMakeModelButton(true);
+		event.preventDefault();
+		makeModelAjax();
+	});
+});
+
+function enableMakeModelButton(flag) {
+	$("#btn_send").prop("disabled", flag);
 }
+
+function makeModelAjax() {
+	var data = {}
+	data["data"] = $("#data").val();
+	data["categoryAttr"] = $("#categoryAttr").val();
+	data["ignoredAttr"] = $("#ignoredAttr").val();
+	var ctx = [[@{/}]];
+	$.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : ctx+"dashboard/decision/tree/makeModel",
+		data : JSON.stringify(data),
+		dataType : 'json',
+		timeout : 100000,
+		success : function(data) {
+			$("#displayTree").html(treeToHtml(data))
+		},
+		error : function(e) {
+			console.log("ERROR: ", e);
+		},
+		done : function(e) {
+			console.log("DONE");
+		}
+	});
+}
+
+	function treeToHtml(tree) {
+	    // only leafs containing category
+	    if (tree.category) {
+	        return  ['<ul>',
+	                    '<li>',
+	                        '<a href="#">',
+	                            '<b>', tree.category, '</b>',
+	                        '</a>',
+	                    '</li>',
+	                 '</ul>'].join('');
+	    }
+	    
+	    return  ['<ul>',
+	                '<li>',
+	                    '<a href="#">',
+	                        '<b>', tree.treeAttr, ' ', tree.predicate, ' ', tree.value, ' ?</b>',
+	                    '</a>',
+	                    '<ul>',
+	                        '<li>',
+	                            '<a href="#">yes</a>',
+	                            treeToHtml(tree.match),
+	                        '</li>',
+	                        '<li>', 
+	                            '<a href="#">no</a>',
+	                            treeToHtml(tree.noMatch),
+	                        '</li>',
+	                    '</ul>',
+	                '</li>',
+	             '</ul>'].join('');
+	}
 </script>
 <body>
     <div th:replace="fragments/dashboard/navbar"/>
@@ -43,19 +92,25 @@ function treeToHtml(tree) {
           <h1 class="page-header">Decision tree sample</h1>
 
           <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
               <h4>Next section provide simple example of decision tree learning</h4>
-            </div>
           </div>
 
           <h2 class="sub-header">Data for building decision model</h2>
-          <form th:action="@{/dashboard/decision/tree/makeModel}" th:object="${csvData}" method="post">
+          <form id="make_model_form" th:action="@{/dashboard/decision/tree/makeModel}" th:object="${csvData}" method="post">
              <textarea class="form-control" name="data" id="data" rows="10" cols="70" th:field="*{data}" placeholder="Enter data"></textarea>
-             <input type="text" class="form-control" name="categoryAttr" th:object="${categoryAttr}" id="categoryAttr" placeholder="Enter category attribute"></input>
-             <input type="text" class="form-control" name="ignoredAttr" th:object="${ignoredyAttr}" id="ignoredAttr" placeholder="Enter ignored attribute"></input>
-             <button type="submit" class="btn btn-default">Make model</button>
-              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+             <p></p>
+             <div class="row placeholders">
+             	<div class="col-md-6">
+             		<input type="text" class="form-control" name="categoryAttr" th:object="${categoryAttr}" id="categoryAttr" placeholder="Enter category attribute"></input>
+             	</div>
+             	<div class="col-md-6">
+             		<input type="text" class="form-control" name="ignoredAttr" th:object="${ignoredyAttr}" id="ignoredAttr" placeholder="Enter ignored attribute"></input>
+             	</div>
+             </div>
+             <button type="submit" class="btn btn-default" id="btn_send">Make model</button>
+              <input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
            </form>
+           <div class="tree" id="displayTree"></div>
         </div>
       </div>
     </div>

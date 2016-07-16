@@ -11,7 +11,7 @@ import java.util.function.BiPredicate;
 import org.springframework.stereotype.Service;
 
 import ru.katarsis.lyra.dto.CSVData;
-import ru.katarsis.lyra.dto.DesicionTree;
+import ru.katarsis.lyra.dto.DecisionTree;
 
 @Service
 public class DecisionTreeService {
@@ -42,8 +42,8 @@ public class DecisionTreeService {
 		}*/
 	}
 	
-	public DesicionTree buildTree(String[][] items,String categoryAttr,String []header,String ignoredAttr){
-	    DesicionTree tree = new DesicionTree();
+	public DecisionTree buildTree(String[][] items,String categoryAttr,String []header,String ignoredAttr){
+	    DecisionTree tree = new DecisionTree();
 	    double initialEntropy = entropy(items, getIndexOfAttib(categoryAttr, header));
 	    if(initialEntropy<=entropyTreshold){
 	        tree.category = getMostFrequentValue(items, getIndexOfAttib(categoryAttr, header));
@@ -93,8 +93,8 @@ public class DecisionTreeService {
     	    }
 	    }
 	    
-	    DesicionTree matchSubTree = buildTree(bestSplit.matchedItems, categoryAttr, header, ignoredAttr);
-	    DesicionTree noMatchSubTree = buildTree(bestSplit.noMatchedItems, categoryAttr, header, ignoredAttr);
+	    DecisionTree matchSubTree = buildTree(bestSplit.matchedItems, categoryAttr, header, ignoredAttr);
+	    DecisionTree noMatchSubTree = buildTree(bestSplit.noMatchedItems, categoryAttr, header, ignoredAttr);
 	    tree.match = matchSubTree;
 	    tree.noMatch = noMatchSubTree;
 	    tree.predicate =bestSplit.predicate;
