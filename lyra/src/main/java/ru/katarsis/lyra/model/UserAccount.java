@@ -19,6 +19,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 
 @Entity
 @Table(name="user_account", schema="public")
@@ -44,6 +47,7 @@ public class UserAccount {
 	private String userLogin;
 	
 	@ManyToMany(fetch=FetchType.EAGER)
+	@Fetch(FetchMode.JOIN)
 	@JoinTable(
 		name="user_roles"
 		, joinColumns={

@@ -8,6 +8,8 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +24,10 @@ import ru.katarsis.lyra.service.DecisionTreeService;
 
 @Controller
 public class DecisionTreeController {
-
-	@Autowired
+    
+    private static final Logger logger = LoggerFactory.getLogger(DecisionTreeController.class);
+	
+    @Autowired
 	DecisionTreeService decisionTreeService;
 	
     @RequestMapping(value="/dashboard/decision/tree", method = RequestMethod.GET)
@@ -35,15 +39,22 @@ public class DecisionTreeController {
     @RequestMapping(value="/dashboard/decision/tree/makeModel", method = RequestMethod.POST)
     @ResponseBody
     public DecisionTree makeModel(@RequestBody CSVData data,HttpServletResponse response){
-    	String []splitedByRow = data.data.split("\n");
-    	String []header = splitedByRow[0].split(",");
-    	String[][] trainigSet = new String [splitedByRow.length-1][];
-		header = splitedByRow[0].split(",");
-		for(int i=1;i<splitedByRow.length;i++){
-		    trainigSet[i-1] = splitedByRow[i].split(",");
-		}
-    	DecisionTree tree = decisionTreeService.buildTree(trainigSet, data.getCategoryAttr(), header, data.getIgnoredAttr());
-     	response.setHeader("Content-Disposition","inline");
+        logger.info("Get make decision tree model request");
+        DecisionTree tree = null;
+        try{
+        	String []splitedByRow = data.data.split("\n");
+        	String []header = splitedByRow[0].split(",");
+        	String[][] trainigSet = new String [splitedByRow.length-1][];
+    		header = splitedByRow[0].split(",");
+    		for(int i=1;i<splitedByRow.length;i++){
+    		    trainigSet[i-1] = splitedByRow[i].split(",");
+    		}
+        	tree = decisionTreeService.buildTree(trainigSet, data.getCategoryAttr(), header, data.getIgnoredAttr());
+         	response.setHeader("Content-Disposition","inline");
+            logger.info("Make decision tree model request successfully finished");
+        }catch(Exception err){
+            logger.error("Error while trying create decision tree model: ",err);
+        }
     	return tree;
     }
    

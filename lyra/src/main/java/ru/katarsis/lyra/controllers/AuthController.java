@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,8 @@ import ru.katarsis.lyra.repository.UserAccountRepository;
 
 @Controller
 public class AuthController {
+    
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 	@Autowired
 	UserAccountRepository userAccountRepository;
 	
@@ -42,11 +46,17 @@ public class AuthController {
     
     @RequestMapping(value = "/doregistration", method = RequestMethod.POST)
 	public String doRegistration(@ModelAttribute ("user") UserAccount user, BindingResult result){
-		List<Role> userDefaultRole = new ArrayList<Role>();
-		Role defaultRole = roleRepository.getRoleById(1);
-		userDefaultRole.add(defaultRole);
-		user.setRoles(userDefaultRole);
-		userAccountRepository.save(user);
+        logger.info("Get registration request ");
+        try{
+    		List<Role> userDefaultRole = new ArrayList<Role>();
+    		Role defaultRole = roleRepository.getRoleById(1);
+    		userDefaultRole.add(defaultRole);
+    		user.setRoles(userDefaultRole);
+    		userAccountRepository.save(user);
+    		logger.info("Registration finished successfully");
+        }catch(Exception err){
+            logger.error("Error while trying registration user:",err);
+        }
 		return "redirect:/";
 	}
     

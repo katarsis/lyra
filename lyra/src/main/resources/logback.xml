@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property resource="logger.properties" />
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- Support multiple-JVM writing to the same log file -->
+    <prudent>true</prudent>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_FOLDER}/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory> 
+      <totalSizeCap>3GB</totalSizeCap>
+    </rollingPolicy>
+
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender> 
+      <turboFilter class="ch.qos.logback.classic.turbo.MarkerFilter">
+        <Marker>PROFILER</Marker>
+        <OnMatch>ACCEPT</OnMatch>
+        <!--  <OnMatch>DENY</OnMatch> -->
+    </turboFilter>
+
+  <root level="INFO">
+    <appender-ref ref="FILE" />
+  </root>
+
+</configuration>
