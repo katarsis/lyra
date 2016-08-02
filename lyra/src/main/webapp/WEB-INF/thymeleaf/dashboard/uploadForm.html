@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header::header">
+</head>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    $(function () {
+        var token = $("input[name='_csrf']").val();
+        var header = "X-CSRF-TOKEN";
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
+});
+</script>
+<body>
+
+    <div th:if="${message}">
+        <h2 th:text="${message}"/>
+    </div>
+
+    <div>
+        <form method="POST" enctype="multipart/form-data" th:action="@{/dashboard/decision/tree/uploadData}+'?'+${_csrf.parameterName}+'='+${_csrf.token}" >
+            <table>
+                <tr><td>File to upload:</td><td><input type="file" name="file" th:object="${file}" /></td></tr>
+                <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+            </table>
+        </form>
+    </div>
+
+    <div>
+        <ul>
+            <li th:each="file : ${files}">
+                <a th:href="${file.href}" th:text="${file.rel}" />
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>

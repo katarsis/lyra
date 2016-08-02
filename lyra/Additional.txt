@@ -1,0 +1,4 @@
+For correct working with thymeleaf wildfly modules fasterxml was changed to version 2.6.0: 
+\modules\system\layers\base\com\fasterxml\jackson\core\jackson-databind\
+\modules\system\layers\base\com\fasterxml\jackson\core\jackson-core\
+\modules\system\layers\base\com\fasterxml\jackson\core\jackson-core
