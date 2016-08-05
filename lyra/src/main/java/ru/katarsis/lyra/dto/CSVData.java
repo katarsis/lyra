@@ -5,6 +5,7 @@ public class CSVData {
 	public String data;
 	public String categoryAttr;
 	public String ignoredAttr;
+	public String fileName;
 	
 	public String getData() {
 		return data;
@@ -28,6 +29,14 @@ public class CSVData {
 
     public void setIgnoredAttr(String ignoredAttr) {
         this.ignoredAttr = ignoredAttr;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
 }

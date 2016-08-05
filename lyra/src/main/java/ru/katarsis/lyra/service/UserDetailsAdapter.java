@@ -26,6 +26,9 @@ public class UserDetailsAdapter implements UserDetails {
 	@SuppressWarnings("unused")
     private String password;
 	
+	public UserDetailsAdapter() {
+        
+    }
 	
 	public UserDetailsAdapter(UserAccount userAccount) {
 		this.userAccount = userAccount;

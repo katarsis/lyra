@@ -19,7 +19,35 @@ jQuery(document).ready(function($) {
 		event.preventDefault();
 		makeModelAjax();
 	});
+	
+	$("#listFiles").on("show.bs.modal", function(e) {
+	    getFilesList();
+	});
 });
+
+
+function getFilesList(){
+    var ctx = [[@{/}]];
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : ctx+"dashboard/decision/tree/files/list",
+            data : JSON.stringify(data),
+            dataType : 'json',
+            timeout : 100000,
+            success : function(data) {
+                data.forEach(function(item, i, arr) {
+                    $("#filesListBody").append("<tr><td>"+item+"</td></tr>")
+                });
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+            },
+            done : function(e) {
+                console.log("DONE");
+            }
+        });
+}
 
 function enableMakeModelButton(flag) {
 	$("#btn_send").prop("disabled", flag);
@@ -90,13 +118,25 @@ function makeModelAjax() {
          
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Decision tree sample</h1>
-          <div class="row placeholders">
-              <h4>Next section provide simple example of decision tree learning</h4>
-          </div>
+          <h4>Next section provide simple example of decision tree learning:</h4>
+           <ul>
+            <li>Input data in csv format(first row must contain attributes names) or choose previously downloaded file</li>
+            <li>Fill category attribute</li>
+            <li>Fill ignored attribute if it necessary</li>
+           </ul>
           <h2 class="sub-header">Data for building decision model</h2>
           <form id="make_model_form" th:action="@{/dashboard/decision/tree/makeModel}" th:object="${csvData}" method="post">
              <textarea class="form-control" name="data" id="data" rows="10" cols="70" th:field="*{data}" placeholder="Enter data"></textarea>
              <p></p>
+             <div class="row placeholders">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                      <span class="btn btn-primary" data-toggle="modal" data-target="#listFiles">Choose file</span>
+                      <input name="fileName" id="fileName" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="text" th:object="${fileName}">
+                    </span>
+                    <span class="form-control"></span>
+                </div>
+             </div>
              <div class="row placeholders">
              	<div class="col-md-6">
              		<input type="text" class="form-control" name="categoryAttr" th:object="${categoryAttr}" id="categoryAttr" placeholder="Enter category attribute"></input>
@@ -109,6 +149,35 @@ function makeModelAjax() {
               <input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
            </form>
            <div class="tree" id="displayTree"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="listFiles" role="dialog">
+        <div class="modal-dialog">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+               <h4 class="modal-title">Choose files</h4>
+            </div>
+            <div class="modal-body">
+            <table class="table table-striped" id="filesList">
+              <thead>
+                <tr>
+                  <th>File name</th>
+                </tr>
+              </thead>
+             <tbody id="filesListBody">
+              </tbody>
+            </table>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-default save_edit" >Save</button>
+            </div>
+          </div>
+          
         </div>
       </div>
     </div>

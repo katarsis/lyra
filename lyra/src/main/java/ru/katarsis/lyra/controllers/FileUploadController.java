@@ -9,15 +9,22 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import ru.katarsis.lyra.dto.CSVData;
+import ru.katarsis.lyra.service.UserDetailsAdapter;
 
 @Controller
 public class FileUploadController {
@@ -65,16 +72,34 @@ public class FileUploadController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/dashboard/decision/tree/files/list")
+    @ResponseBody
+    public ResponseEntity<?> getFileList(HttpServletResponse response) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetailsAdapter activeUser = authentication == null ? null : (UserDetailsAdapter)authentication.getPrincipal();
+            String folderPath = activeUser.getUsername();
+            List<String> uploadedFiles = new ArrayList<String>();
+            Path uploadedFilesPath = Paths.get(ROOT,folderPath);
+            uploadedFiles = Files.walk(uploadedFilesPath)
+                    .filter(path -> !path.equals(Paths.get(ROOT,folderPath)))
+                    .map(path -> Paths.get(ROOT).relativize(path))
+                    .map(path -> path.toFile().getName())
+                    .collect(Collectors.toList());
+            response.setHeader("Content-Disposition","inline");
+            return ResponseEntity.ok(uploadedFiles);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/dashboard/decision/tree/uploadData")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
-
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         if (!file.isEmpty()) {
             try {
                 Files.copy(file.getInputStream(), Paths.get(ROOT, file.getOriginalFilename()));
-                redirectAttributes.addFlashAttribute("message",
-                        "You successfully uploaded " + file.getOriginalFilename() + "!");
+                redirectAttributes.addFlashAttribute("message","You successfully uploaded " + file.getOriginalFilename() + "!");
             } catch (IOException|RuntimeException e) {
                 redirectAttributes.addFlashAttribute("message", "Failued to upload " + file.getOriginalFilename() + " => " + e.getMessage());
             }
