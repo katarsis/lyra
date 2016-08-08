@@ -21,9 +21,24 @@ jQuery(document).ready(function($) {
 	});
 	
 	$("#listFiles").on("show.bs.modal", function(e) {
+	    clearListFilesTable();
 	    getFilesList();
 	});
+	
+	$("#filesListBody").on('click','tr',function(e){
+	    var id = $(this).text();
+	    $("#fileName").text(id);
+	    $("#fileName").val(id);
+	    $(".input-group .form-control").text(id);
+	    $("#closeBtn").click();
+	});
 });
+
+
+function clearListFilesTable(){
+    $("#filesListBody").html("");
+}
+
 
 
 function getFilesList(){
@@ -58,6 +73,7 @@ function makeModelAjax() {
 	data["data"] = $("#data").val();
 	data["categoryAttr"] = $("#categoryAttr").val();
 	data["ignoredAttr"] = $("#ignoredAttr").val();
+	data["fileName"] = $("#fileName").val();
 	var ctx = [[@{/}]];
 	$.ajax({
 		type : "POST",
@@ -67,12 +83,15 @@ function makeModelAjax() {
 		dataType : 'json',
 		timeout : 100000,
 		success : function(data) {
-			$("#displayTree").html(treeToHtml(data))
+		    enableMakeModelButton(false);
+		    $("#displayTree").html(treeToHtml(data))
 		},
 		error : function(e) {
+	        enableMakeModelButton(false);
 			console.log("ERROR: ", e);
 		},
 		done : function(e) {
+	        enableMakeModelButton(false);
 			console.log("DONE");
 		}
 	});
@@ -129,12 +148,16 @@ function makeModelAjax() {
              <textarea class="form-control" name="data" id="data" rows="10" cols="70" th:field="*{data}" placeholder="Enter data"></textarea>
              <p></p>
              <div class="row placeholders">
-                <div class="input-group">
-                    <span class="input-group-btn">
-                      <span class="btn btn-primary" data-toggle="modal" data-target="#listFiles">Choose file</span>
-                      <input name="fileName" id="fileName" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="text" th:object="${fileName}">
-                    </span>
-                    <span class="form-control"></span>
+                <div class="input-group col-md-12">
+                    <div class="col-md-2">
+                      <span class="input-group-btn">
+                        <span class="btn btn-primary" data-toggle="modal" data-target="#listFiles">Choose file</span>
+                        <input type="text" name="fileName" id="fileName" style="display: none;"  th:object="${fileName}"></input>
+                      </span>
+                    </div>
+                    <div class="col-md-10"> 
+                        <span class="form-control"></span>
+                    </div>
                 </div>
              </div>
              <div class="row placeholders">
@@ -173,7 +196,7 @@ function makeModelAjax() {
               </tbody>
             </table>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal" id="closeBtn">Close</button>
               <button type="submit" class="btn btn-default save_edit" >Save</button>
             </div>
           </div>

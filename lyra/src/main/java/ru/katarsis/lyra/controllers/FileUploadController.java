@@ -7,6 +7,7 @@ package ru.katarsis.lyra.controllers;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -96,9 +97,13 @@ public class FileUploadController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/dashboard/decision/tree/uploadData")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        File userFolder = new File(ROOT+File.separator+getCurrentUserName());
+        if(!userFolder.exists()){
+            userFolder.mkdirs();
+        }
         if (!file.isEmpty()) {
             try {
-                Files.copy(file.getInputStream(), Paths.get(ROOT, file.getOriginalFilename()));
+                Files.copy(file.getInputStream(), Paths.get(userFolder.getCanonicalPath(), file.getOriginalFilename()));
                 redirectAttributes.addFlashAttribute("message","You successfully uploaded " + file.getOriginalFilename() + "!");
             } catch (IOException|RuntimeException e) {
                 redirectAttributes.addFlashAttribute("message", "Failued to upload " + file.getOriginalFilename() + " => " + e.getMessage());
@@ -108,6 +113,12 @@ public class FileUploadController {
         }
 
         return "redirect:/";
+    }
+    
+    private String getCurrentUserName(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsAdapter activeUser = authentication == null ? null : (UserDetailsAdapter)authentication.getPrincipal();
+        return activeUser.getUsername();
     }
 
 }
