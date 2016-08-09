@@ -23,9 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,17 +33,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import ru.katarsis.lyra.service.UserDetailsAdapter;
+import ru.katarsis.lyra.service.UserSessionService;
 
 @Controller
 public class FileUploadController {
 
-    private static final Logger log = LoggerFactory.getLogger(FileUploadController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
 
     public static final String ROOT = "D:\\lyra\\upload_dir";
 
     private final ResourceLoader resourceLoader;
 
+    @Autowired
+    UserSessionService userSessionService;
+    
     @Autowired
     public FileUploadController(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
@@ -66,7 +66,6 @@ public class FileUploadController {
     @RequestMapping(method = RequestMethod.GET, value = "/{filename:.+}")
     @ResponseBody
     public ResponseEntity<?> getFile(@PathVariable String filename) {
-
         try {
             return ResponseEntity.ok(resourceLoader.getResource("file:" + Paths.get(ROOT, filename).toString()));
         } catch (Exception e) {
@@ -78,9 +77,7 @@ public class FileUploadController {
     @ResponseBody
     public ResponseEntity<?> getFileList(HttpServletResponse response) {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserDetailsAdapter activeUser = authentication == null ? null : (UserDetailsAdapter)authentication.getPrincipal();
-            String folderPath = activeUser.getUsername();
+            String folderPath = userSessionService.getCurrentUserName();
             List<String> uploadedFiles = new ArrayList<String>();
             Path uploadedFilesPath = Paths.get(ROOT,folderPath);
             uploadedFiles = Files.walk(uploadedFilesPath)
@@ -91,13 +88,15 @@ public class FileUploadController {
             response.setHeader("Content-Disposition","inline");
             return ResponseEntity.ok(uploadedFiles);
         } catch (Exception e) {
+            logger.error("Error while trying get list of files:" , e);
             return ResponseEntity.notFound().build();
         }
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/dashboard/decision/tree/uploadData")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-        File userFolder = new File(ROOT+File.separator+getCurrentUserName());
+        File userFolder = new File(ROOT+File.separator+userSessionService.getCurrentUserName());
+        logger.info("Trying upload file to folder: "+userFolder.getAbsolutePath());
         if(!userFolder.exists()){
             userFolder.mkdirs();
         }
@@ -107,18 +106,13 @@ public class FileUploadController {
                 redirectAttributes.addFlashAttribute("message","You successfully uploaded " + file.getOriginalFilename() + "!");
             } catch (IOException|RuntimeException e) {
                 redirectAttributes.addFlashAttribute("message", "Failued to upload " + file.getOriginalFilename() + " => " + e.getMessage());
+                logger.error("Error while trying upload file: ", e);
             }
         } else {
             redirectAttributes.addFlashAttribute("message", "Failed to upload " + file.getOriginalFilename() + " because it was empty");
         }
 
-        return "redirect:/";
+        return "redirect:/dashboard/decision/tree/";
     }
-    
-    private String getCurrentUserName(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsAdapter activeUser = authentication == null ? null : (UserDetailsAdapter)authentication.getPrincipal();
-        return activeUser.getUsername();
-    }
-
+ 
 }

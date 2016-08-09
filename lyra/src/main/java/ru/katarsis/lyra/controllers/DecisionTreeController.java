@@ -5,8 +5,6 @@
 package ru.katarsis.lyra.controllers;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ru.katarsis.lyra.dto.CSVData;
 import ru.katarsis.lyra.dto.DecisionTree;
 import ru.katarsis.lyra.service.DecisionTreeService;
-import ru.katarsis.lyra.service.UserDetailsAdapter;
+import ru.katarsis.lyra.service.UserFilesService;
+import ru.katarsis.lyra.service.UserSessionService;
 
 @Controller
 public class DecisionTreeController {
@@ -35,6 +32,12 @@ public class DecisionTreeController {
 	
     @Autowired
 	DecisionTreeService decisionTreeService;
+    
+    @Autowired 
+    UserSessionService userSessionService;
+    
+    @Autowired
+    UserFilesService userFilesService;
 	
     @RequestMapping(value="/dashboard/decision/tree", method = RequestMethod.GET)
     public String showDefaultDashboard(Locale locale, Model model){
@@ -50,7 +53,7 @@ public class DecisionTreeController {
         try{
             String []splitedByRow = null;
             if(data.fileName!=null&&!data.fileName.isEmpty()){
-                splitedByRow = getDataFromFileSource(new File( "D:\\lyra\\upload_dir"+File.separator+getCurrentUserName()+File.separator+data.fileName)).replace("\r", "").split("\n");
+                splitedByRow = userFilesService.getDataFromFileSource(new File( "D:\\lyra\\upload_dir"+File.separator+userSessionService.getCurrentUserName()+File.separator+data.fileName)).replace("\r", "").split("\n");
             }else{
                 splitedByRow = data.data.split("\n");
             }
@@ -69,19 +72,7 @@ public class DecisionTreeController {
     	return tree;
     }
     
-    private String getDataFromFileSource(File sourcefile){
-        String result = null;
-        try{
-            result = new String(Files.readAllBytes(Paths.get(sourcefile.getCanonicalPath())), "UTF-8");
-        }catch (Exception err){
-            logger.error("Error while read source file", err);
-        }
-        return result;
-    }
+    
    
-    private String getCurrentUserName(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsAdapter activeUser = authentication == null ? null : (UserDetailsAdapter)authentication.getPrincipal();
-        return activeUser.getUsername();
-    }
+    
 }
