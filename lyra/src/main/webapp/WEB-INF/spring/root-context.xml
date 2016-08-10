@@ -12,6 +12,12 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
+	<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="location" value="WEB-INF/application.properties">
+        </property>
+    </bean>
+      
 	<context:annotation-config />
 	<jpa:repositories base-package="ru.katarsis.lyra.repository"/>
 	<context:component-scan base-package="ru.katarsis.lyra.service"></context:component-scan>
