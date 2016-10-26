@@ -40,9 +40,6 @@ public class FileUploadController {
     @Autowired
     UserFilesService userFilesService;
     
-    @Autowired
-    public FileUploadController() {
-    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/dashboard/decision/tree/uploadData")
     public String provideUploadInfo(Model model) throws IOException {
