@@ -3,6 +3,17 @@
 <suite name="Failed suite [Suite]">
   <test name="Test(failed)">
     <classes>
+      <class name="ru.katarsis.lyra.service.TestKmeansService">
+        <methods>
+          <include name="springTestContextBeforeTestClass"/>
+          <include name="testKmeanClassification"/>
+          <include name="springTestContextPrepareTestInstance"/>
+          <include name="springTestContextAfterTestClass"/>
+          <include name="setupData"/>
+          <include name="springTestContextBeforeTestMethod"/>
+          <include name="springTestContextAfterTestMethod"/>
+        </methods>
+      </class> <!-- ru.katarsis.lyra.service.TestKmeansService -->
       <class name="ru.katarsis.lyra.service.TestDesicionTreeService">
         <methods>
           <include name="springTestContextBeforeTestClass"/>
@@ -11,7 +22,6 @@
           <include name="springTestContextAfterTestClass"/>
           <include name="springTestContextBeforeTestMethod"/>
           <include name="springTestContextAfterTestMethod"/>
-          <include name="testEmailGenerator"/>
         </methods>
       </class> <!-- ru.katarsis.lyra.service.TestDesicionTreeService -->
     </classes>

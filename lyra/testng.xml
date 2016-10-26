@@ -4,6 +4,7 @@
   <test name="Test">
     <classes>
       <class name="ru.katarsis.lyra.service.TestDesicionTreeService"/>
+      <class name="ru.katarsis.lyra.service.TestKmeansService"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

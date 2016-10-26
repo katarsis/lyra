@@ -39,7 +39,7 @@ public class TestDesicionTreeService extends AbstractTestNGSpringContextTests {
     }
     
     @Test()
-    void testEmailGenerator() {
+    void testDecisionGenerator() {
         DecisionTree tree = decisionTreeService.buildTree(testItems, "sex", header, "person");
         Assert.assertEquals(tree.treeAttr+tree.predicate+tree.value, "weight>=170");
         Assert.assertEquals(tree.match.category, "male");

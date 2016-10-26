@@ -90,7 +90,7 @@
               <div class="suite-section-content">
                 <ul>
                   <li>
-                    <span class="method-stats">1 method,   1 passed</span>
+                    <span class="method-stats">2 methods,   2 passed</span>
                   </li>
                   <li>
                     <span class="method-list-title passed">Passed methods</span>
@@ -101,7 +101,12 @@
                     <div class="method-list-content passed suite-Suite">
                       <span>
                         <img width="3%" src="passed.png"/>
-                        <a href="#" class="method navigator-link" panel-name="suite-Suite" title="ru.katarsis.lyra.service.TestDesicionTreeService" hash-for-method="testEmailGenerator">testEmailGenerator</a> <!-- method navigator-link -->
+                        <a href="#" class="method navigator-link" panel-name="suite-Suite" title="ru.katarsis.lyra.service.TestDesicionTreeService" hash-for-method="testDecisionGenerator">testDecisionGenerator</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img width="3%" src="passed.png"/>
+                        <a href="#" class="method navigator-link" panel-name="suite-Suite" title="ru.katarsis.lyra.service.TestKmeansService" hash-for-method="testKmeanClassification">testKmeanClassification</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                     </div> <!-- method-list-content passed suite-Suite -->
@@ -119,14 +124,29 @@
           <div class="suite-Suite-class-passed">
             <div class="main-panel-header rounded-window-top">
               <img src="passed.png"/>
+              <span class="class-name">ru.katarsis.lyra.service.TestKmeansService</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="testKmeanClassification">
+                  </a> <!-- testKmeanClassification -->
+                  <span class="method-name">testKmeanClassification</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Suite-class-passed -->
+          <div class="suite-Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
               <span class="class-name">ru.katarsis.lyra.service.TestDesicionTreeService</span>
             </div> <!-- main-panel-header rounded-window-top -->
             <div class="main-panel-content rounded-window-bottom">
               <div class="method">
                 <div class="method-content">
-                  <a name="testEmailGenerator">
-                  </a> <!-- testEmailGenerator -->
-                  <span class="method-name">testEmailGenerator</span>
+                  <a name="testDecisionGenerator">
+                  </a> <!-- testDecisionGenerator -->
+                  <span class="method-name">testDecisionGenerator</span>
                 </div> <!-- method-content -->
               </div> <!-- method -->
             </div> <!-- main-panel-content rounded-window-bottom -->
@@ -144,6 +164,7 @@
   &lt;test name=&quot;Test&quot;&gt;
     &lt;classes&gt;
       &lt;class name=&quot;ru.katarsis.lyra.service.TestDesicionTreeService&quot;/&gt;
+      &lt;class name=&quot;ru.katarsis.lyra.service.TestKmeansService&quot;/&gt;
     &lt;/classes&gt;
   &lt;/test&gt; &lt;!-- Test --&gt;
 &lt;/suite&gt; &lt;!-- Suite --&gt;
@@ -157,7 +178,7 @@
           <div class="main-panel-content rounded-window-bottom">
             <ul>
               <li>
-                <span class="test-name">Test (1 class)</span>
+                <span class="test-name">Test (2 classes)</span>
               </li>
             </ul>
           </div> <!-- main-panel-content rounded-window-bottom -->
@@ -183,16 +204,20 @@ data.addColumn('number', 'Number');
 data.addColumn('string', 'Method');
 data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
-data.addRows(1);
+data.addRows(2);
 data.setCell(0, 0, 0)
-data.setCell(0, 1, 'testEmailGenerator')
+data.setCell(0, 1, 'testDecisionGenerator')
 data.setCell(0, 2, 'ru.katarsis.lyra.service.TestDesicionTreeService')
-data.setCell(0, 3, 10);
+data.setCell(0, 3, 14);
+data.setCell(1, 0, 1)
+data.setCell(1, 1, 'testKmeanClassification')
+data.setCell(1, 2, 'ru.katarsis.lyra.service.TestKmeansService')
+data.setCell(1, 3, 10);
 window.suiteTableData['Suite']= { tableData: data, tableDiv: 'times-div-Suite'}
 return data;
 }
               </script>
-              <span class="suite-total-time">Total running time: 10 ms</span>
+              <span class="suite-total-time">Total running time: 24 ms</span>
               <div id="times-div-Suite">
               </div> <!-- times-div-Suite -->
             </div> <!-- times-div -->
@@ -218,34 +243,68 @@ return data;
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <div class="chronological-class">
+              <div class="chronological-class-name">ru.katarsis.lyra.service.TestKmeansService</div> <!-- chronological-class-name -->
+              <div class="configuration-test before">
+                <span class="method-name">setupData</span>
+                <span class="method-start">0 ms</span>
+              </div> <!-- configuration-test before -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
               <div class="chronological-class-name">ru.katarsis.lyra.service.TestDesicionTreeService</div> <!-- chronological-class-name -->
               <div class="configuration-class before">
                 <span class="method-name">springTestContextBeforeTestClass</span>
-                <span class="method-start">0 ms</span>
+                <span class="method-start">22 ms</span>
               </div> <!-- configuration-class before -->
               <div class="configuration-class before">
                 <span class="method-name">springTestContextPrepareTestInstance</span>
-                <span class="method-start">10 ms</span>
+                <span class="method-start">22 ms</span>
               </div> <!-- configuration-class before -->
               <div class="configuration-class before">
                 <span class="method-name">setUpTest</span>
-                <span class="method-start">2341 ms</span>
+                <span class="method-start">2509 ms</span>
               </div> <!-- configuration-class before -->
               <div class="configuration-method before">
-                <span class="method-name">springTestContextBeforeTestMethod(void ru.katarsis.lyra.service.TestDesicionTreeService.testEmailGenerator())</span>
-                <span class="method-start">2341 ms</span>
+                <span class="method-name">springTestContextBeforeTestMethod(void ru.katarsis.lyra.service.TestDesicionTreeService.testDecisionGenerator())</span>
+                <span class="method-start">2511 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
-                <span class="method-name">testEmailGenerator</span>
-                <span class="method-start">2341 ms</span>
+                <span class="method-name">testDecisionGenerator</span>
+                <span class="method-start">2511 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
-                <span class="method-name">springTestContextAfterTestMethod(void ru.katarsis.lyra.service.TestDesicionTreeService.testEmailGenerator())</span>
-                <span class="method-start">2351 ms</span>
+                <span class="method-name">springTestContextAfterTestMethod(void ru.katarsis.lyra.service.TestDesicionTreeService.testDecisionGenerator())</span>
+                <span class="method-start">2526 ms</span>
               </div> <!-- configuration-method after -->
               <div class="configuration-class after">
                 <span class="method-name">springTestContextAfterTestClass</span>
-                <span class="method-start">2361 ms</span>
+                <span class="method-start">2527 ms</span>
+              </div> <!-- configuration-class after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">ru.katarsis.lyra.service.TestKmeansService</div> <!-- chronological-class-name -->
+              <div class="configuration-class before">
+                <span class="method-name">springTestContextBeforeTestClass</span>
+                <span class="method-start">2528 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="configuration-class before">
+                <span class="method-name">springTestContextPrepareTestInstance</span>
+                <span class="method-start">2528 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="configuration-method before">
+                <span class="method-name">springTestContextBeforeTestMethod(void ru.katarsis.lyra.service.TestKmeansService.testKmeanClassification())</span>
+                <span class="method-start">2533 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">testKmeanClassification</span>
+                <span class="method-start">2533 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">springTestContextAfterTestMethod(void ru.katarsis.lyra.service.TestKmeansService.testKmeanClassification())</span>
+                <span class="method-start">2543 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-class after">
+                <span class="method-name">springTestContextAfterTestClass</span>
+                <span class="method-start">2544 ms</span>
               </div> <!-- configuration-class after -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
